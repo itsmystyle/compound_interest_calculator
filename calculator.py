@@ -51,7 +51,7 @@ if __name__ == "__main__":
         if args.generate_per_cycle is not None and payout_cash >= args.generate_per_cycle:
             break
 
-    print("Initial cash: {}".format(args.initial_cash))
+    print("Initial invested cash: {}".format(args.initial_cash))
     print("Invested cycles: {}".format(cycles))
-    print("Total accumulated cash: {}".format(accumulated_cash))
+    print("Total invested cash: {}".format(accumulated_cash))
     print("Generated cash per cycle: {}".format(payout_cash))
