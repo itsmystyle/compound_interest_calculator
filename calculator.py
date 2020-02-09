@@ -39,9 +39,10 @@ if __name__ == "__main__":
     while True:
         payout_cash = payout(accumulated_cash, payout_rate)
         leftout_cash += payout_cash
-        multiply = leftout_cash // 1000
-        accumulated_cash += multiply * 1000
-        leftout_cash %= 1000
+        multiply = leftout_cash // 100
+        if multiply >= 10:
+            accumulated_cash += multiply * 100
+            leftout_cash %= 100
         cycles += 1
 
         if args.total_invested_cash is not None and accumulated_cash >= args.total_invested_cash:
