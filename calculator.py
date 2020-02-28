@@ -25,6 +25,7 @@ if __name__ == "__main__":
     )
     parser.add_argument("-c", "--cycle", type=int, help="Cycles. (termination criteria)")
     parser.add_argument("-m", "--min_reinvest", type=float, default=1000.0, help="Minimum step up cash.")
+    parser.add_argument("-v", "--verbose", type=int, default=0, help="Verbose.")
 
     args = parser.parse_args()
 
@@ -45,6 +46,14 @@ if __name__ == "__main__":
             accumulated_cash += multiply * args.min_reinvest
             leftout_cash %= args.min_reinvest
         cycles += 1
+
+        if args.verbose > 0:
+        	print(f"Number of cycles: {cycles}")
+        	print(f"Invested cash: {accumulated_cash}")
+        	print(f"Cash generated in current cycle: {payout_cash}")
+        	print(f"ROI rate: {payout_rate}")
+        	print(f"Left out cash: {leftout_cash}")
+        	print("======================================================")
 
         if args.total_invested_cash is not None and accumulated_cash >= args.total_invested_cash:
             break
