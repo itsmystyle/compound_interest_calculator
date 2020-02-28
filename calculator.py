@@ -24,6 +24,7 @@ if __name__ == "__main__":
         help="Generated cash per cycle. (termination criteria)",
     )
     parser.add_argument("-c", "--cycle", type=int, help="Cycles. (termination criteria)")
+    parser.add_argument("-m", "--min_reinvest", type=float, default=1000.0, help="Minimum step up cash.")
 
     args = parser.parse_args()
 
@@ -39,10 +40,10 @@ if __name__ == "__main__":
     while True:
         payout_cash = payout(accumulated_cash, payout_rate)
         leftout_cash += payout_cash
-        multiply = leftout_cash // 100
-        if multiply >= 10:
-            accumulated_cash += multiply * 100
-            leftout_cash %= 100
+        multiply = leftout_cash // args.min_reinvest
+        if multiply >= (1000/args.min_reinvest):
+            accumulated_cash += multiply * args.min_reinvest
+            leftout_cash %= args.min_reinvest
         cycles += 1
 
         if args.total_invested_cash is not None and accumulated_cash >= args.total_invested_cash:
