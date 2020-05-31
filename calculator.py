@@ -8,6 +8,7 @@ def payout(cash, rate):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compound Interest Calculator.")
     parser.add_argument("initial_cash", type=float, help="Initial invested cash.")
+    parser.add_argument("-apm", "--addition_per_month", type=float, default=0.0, help="Addition cash per month.")
     parser.add_argument(
         "-pr", "--payout_rate", type=float, default=7.2, help="Pay out rate, e.g 7.2 for 7.2%%."
     )
@@ -33,6 +34,7 @@ if __name__ == "__main__":
         raise Exception("Termination criteria is not given. Please use -h for more information.")
 
     accumulated_cash = args.initial_cash
+    total_invested_cash = args.initial_cash
     leftout_cash = 0.0
     cycles = 0
     payout_cash = 0.0
@@ -41,6 +43,8 @@ if __name__ == "__main__":
     while True:
         payout_cash = payout(accumulated_cash, payout_rate)
         leftout_cash += payout_cash
+        leftout_cash += args.addition_per_month
+        total_invested_cash += args.addition_per_month
         multiply = leftout_cash // args.min_reinvest
         if multiply >= (1000/args.min_reinvest):
             accumulated_cash += multiply * args.min_reinvest
@@ -48,12 +52,13 @@ if __name__ == "__main__":
         cycles += 1
 
         if args.verbose > 0:
-        	print(f"Number of cycles: {cycles}")
-        	print(f"Invested cash: {accumulated_cash}")
-        	print(f"Cash generated in current cycle: {payout_cash}")
-        	print(f"ROI rate: {payout_rate}")
-        	print(f"Left out cash: {leftout_cash}")
-        	print("======================================================")
+            print(f"Number of cycles: {cycles}")
+            print(f"My invested cash: {total_invested_cash}")
+            print(f"Invested cash: {accumulated_cash}")
+            print(f"Cash generated in current cycle: {payout_cash}")
+            print(f"ROI rate: {payout_rate}")
+            print(f"Left out cash: {leftout_cash}")
+            print("======================================================")
 
         if args.total_invested_cash is not None and accumulated_cash >= args.total_invested_cash:
             break
@@ -63,6 +68,7 @@ if __name__ == "__main__":
             break
 
     print("Initial invested cash: {}".format(args.initial_cash))
+    print("My total invested cash: {}".format(total_invested_cash))
     print("Invested cycles: {}".format(cycles))
     print("Total invested cash: {}".format(accumulated_cash))
     print("Generated cash per cycle: {}".format(payout_cash))
