@@ -9,6 +9,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Compound Interest Calculator.")
     parser.add_argument("initial_cash", type=float, help="Initial invested cash.")
     parser.add_argument("-apm", "--addition_per_month", type=float, default=0.0, help="Addition cash per month.")
+    parser.add_argument("-ad", "--addition_duration", type=int, default=24, help="Addition cash duration (cycle).")
     parser.add_argument(
         "-pr", "--payout_rate", type=float, default=7.2, help="Pay out rate, e.g 7.2 for 7.2%%."
     )
@@ -39,12 +40,15 @@ if __name__ == "__main__":
     cycles = 0
     payout_cash = 0.0
     payout_rate = args.payout_rate / 100.0
+    addition_duration = args.addition_duration
 
     while True:
         payout_cash = payout(accumulated_cash, payout_rate)
         leftout_cash += payout_cash
-        leftout_cash += args.addition_per_month
-        total_invested_cash += args.addition_per_month
+        if addition_duration > 0:
+            addition_duration -= 1
+            leftout_cash += args.addition_per_month
+            total_invested_cash += args.addition_per_month
         multiply = leftout_cash // args.min_reinvest
         if multiply >= (1000/args.min_reinvest):
             accumulated_cash += multiply * args.min_reinvest
